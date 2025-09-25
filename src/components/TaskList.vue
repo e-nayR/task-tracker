@@ -6,229 +6,19 @@
           <table class="table table-striped">
             <tbody>
               <tr>
-                <th class="text-center">
-                  <div
-                    class="custom-checkbox custom-checkbox-table custom-control"
-                  >
-                    <input
-                      type="checkbox"
-                      data-checkboxes="mygroup"
-                      data-checkbox-role="dad"
-                      class="custom-control-input"
-                      id="checkbox-all"
-                    />
-                    <label for="checkbox-all" class="custom-control-label"
-                      >&nbsp;</label
-                    >
-                  </div>
-                </th>
-                <th>Task Name</th>
-                <th>Progress</th>
-                <th>Due Date</th>
-                <th>Action</th>
+                <th>Tarefa</th>
+                <th>Duração</th>
+                <th></th>
               </tr>
-              <tr>
-                <td class="p-0 text-center">
-                  <div class="custom-checkbox custom-control">
-                    <input
-                      type="checkbox"
-                      data-checkboxes="mygroup"
-                      class="custom-control-input"
-                      id="checkbox-1"
-                    />
-                    <label for="checkbox-1" class="custom-control-label"
-                      >&nbsp;</label
-                    >
-                  </div>
-                </td>
-                <td>Ecommerce website</td>
-                <td class="align-middle">
-                  <div
-                    class="progress"
-                    data-height="4"
-                    data-toggle="tooltip"
-                    title=""
-                    data-original-title="100%"
-                    style="height: 4px"
-                  >
-                    <div
-                      class="progress-bar bg-success"
-                      data-width="100"
-                      style="width: 100px"
-                    ></div>
-                  </div>
-                </td>
-                <td>2018-01-20</td>
+              <tr v-for="task, index in tasks" :key="index">
+                <td>{{task.text}}</td>
+                <td>{{ task.duration }}</td>
                 <td>
-                  <a
-                    class="btn btn-primary btn-action mr-1"
-                    data-toggle="tooltip"
-                    title=""
-                    data-original-title="Edit"
-                    ><i class="fas fa-pencil-alt"></i
-                  ></a>
-                  <a
-                    class="btn btn-danger btn-action"
-                    data-toggle="tooltip"
-                    title=""
+                  <a class="btn btn-primary btn-action mr-1" data-toggle="tooltip" title="" data-original-title="Edit"><i
+                      class="bi bi-pencil"></i></a>
+                  <a class="btn btn-danger btn-action" data-toggle="tooltip" title=""
                     data-confirm="Are You Sure?|This action can not be undone. Do you want to continue?"
-                    data-confirm-yes="alert('Deleted')"
-                    data-original-title="Delete"
-                    ><i class="fas fa-trash"></i
-                  ></a>
-                </td>
-              </tr>
-              <tr>
-                <td class="p-0 text-center">
-                  <div class="custom-checkbox custom-control">
-                    <input
-                      type="checkbox"
-                      data-checkboxes="mygroup"
-                      class="custom-control-input"
-                      id="checkbox-4"
-                    />
-                    <label for="checkbox-4" class="custom-control-label"
-                      >&nbsp;</label
-                    >
-                  </div>
-                </td>
-                <td>Android App</td>
-                <td class="align-middle">
-                  <div
-                    class="progress"
-                    data-height="4"
-                    data-toggle="tooltip"
-                    title=""
-                    data-original-title="30%"
-                    style="height: 4px"
-                  >
-                    <div
-                      class="progress-bar bg-orange"
-                      data-width="30"
-                      style="width: 30px"
-                    ></div>
-                  </div>
-                </td>
-                <td>2018-09-11</td>
-                <td>
-                  <a
-                    class="btn btn-primary btn-action mr-1"
-                    data-toggle="tooltip"
-                    title=""
-                    data-original-title="Edit"
-                    ><i class="fas fa-pencil-alt"></i
-                  ></a>
-                  <a
-                    class="btn btn-danger btn-action"
-                    data-toggle="tooltip"
-                    title=""
-                    data-confirm="Are You Sure?|This action can not be undone. Do you want to continue?"
-                    data-confirm-yes="alert('Deleted')"
-                    data-original-title="Delete"
-                    ><i class="fas fa-trash"></i
-                  ></a>
-                </td>
-              </tr>
-              <tr>
-                <td class="p-0 text-center">
-                  <div class="custom-checkbox custom-control">
-                    <input
-                      type="checkbox"
-                      data-checkboxes="mygroup"
-                      class="custom-control-input"
-                      id="checkbox-5"
-                    />
-                    <label for="checkbox-5" class="custom-control-label"
-                      >&nbsp;</label
-                    >
-                  </div>
-                </td>
-                <td>Logo Design</td>
-                <td class="align-middle">
-                  <div
-                    class="progress"
-                    data-height="4"
-                    data-toggle="tooltip"
-                    title=""
-                    data-original-title="67%"
-                    style="height: 4px"
-                  >
-                    <div
-                      class="progress-bar bg-purple"
-                      data-width="67"
-                      style="width: 67px"
-                    ></div>
-                  </div>
-                </td>
-                <td>2018-04-12</td>
-                <td>
-                  <a
-                    class="btn btn-primary btn-action mr-1"
-                    data-toggle="tooltip"
-                    title=""
-                    data-original-title="Edit"
-                    ><i class="fas fa-pencil-alt"></i
-                  ></a>
-                  <a
-                    class="btn btn-danger btn-action"
-                    data-toggle="tooltip"
-                    title=""
-                    data-confirm="Are You Sure?|This action can not be undone. Do you want to continue?"
-                    data-confirm-yes="alert('Deleted')"
-                    data-original-title="Delete"
-                    ><i class="fas fa-trash"></i
-                  ></a>
-                </td>
-              </tr>
-              <tr>
-                <td class="p-0 text-center">
-                  <div class="custom-checkbox custom-control">
-                    <input
-                      type="checkbox"
-                      data-checkboxes="mygroup"
-                      class="custom-control-input"
-                      id="checkbox-6"
-                    />
-                    <label for="checkbox-6" class="custom-control-label"
-                      >&nbsp;</label
-                    >
-                  </div>
-                </td>
-                <td>Java Project</td>
-                <td class="align-middle">
-                  <div
-                    class="progress"
-                    data-height="4"
-                    data-toggle="tooltip"
-                    title=""
-                    data-original-title="43%"
-                    style="height: 4px"
-                  >
-                    <div
-                      class="progress-bar bg-success"
-                      data-width="43"
-                      style="width: 43px"
-                    ></div>
-                  </div>
-                </td>
-                <td>2018-01-20</td>
-                <td>
-                  <a
-                    class="btn btn-primary btn-action mr-1"
-                    data-toggle="tooltip"
-                    title=""
-                    data-original-title="Edit"
-                    ><i class="fas fa-pencil-alt"></i
-                  ></a>
-                  <a
-                    class="btn btn-danger btn-action"
-                    data-toggle="tooltip"
-                    title=""
-                    data-confirm="Are You Sure?|This action can not be undone. Do you want to continue?"
-                    data-confirm-yes="alert('Deleted')"
-                    data-original-title="Delete"
-                    ><i class="fas fa-trash"></i
-                  ></a>
+                    data-confirm-yes="alert('Deleted')" data-original-title="Delete"><i class="bi bi-trash"></i></a>
                 </td>
               </tr>
             </tbody>
@@ -238,3 +28,14 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    tasks: {
+      type: Array,
+      required: true
+    }
+  }
+}
+</script>
