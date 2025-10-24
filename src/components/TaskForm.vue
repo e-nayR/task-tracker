@@ -1,3 +1,43 @@
+<<<<<<< HEAD
+=======
+<script setup>
+import { ref } from 'vue'
+import { parseISO, } from 'date-fns'
+
+const text = ref('')
+const date_start = ref(null)
+const date_end = ref(null)
+const status = ref(null)
+
+const emit = defineEmits(['add-task'])
+
+function onSubmit() {
+  let start = date_start.value
+  let end = date_end.value
+  if (start != null) {
+    start = parseISO(start)
+  }
+  if (end != null) {
+    end = parseISO(end)
+  }
+
+  emit('add-task', {
+    finish: (status.value == 2 ? true : false),
+    text: text.value,
+    date_start: start,
+    date_end: end,
+    status: status.value
+  })
+
+  // Limpar campos
+  text.value = ''
+  date_start.value = null
+  date_end.value = null
+  status.value = null
+}
+</script>
+
+>>>>>>> 9408a7b (mudou-se estrutura: agora é com Vue 3)
 <template>
   <div class="container mb-3 mt-3">
     <form @submit.prevent="onSubmit">
@@ -9,10 +49,33 @@
               aria-required="true" />
           </div>
         </div>
+<<<<<<< HEAD
         <div class="col-sm-12 mb-3">
           <div class="form-group">
             <input type="checkbox" id="taskReminder" v-model="reminder" class="form-check-input" />
             <label for="taskReminder" class="form-check-label">Definir lembrete</label>
+=======
+        <div class="col-sm-6 mb-3">
+          <div class="form-group">
+            <label class="form-label">Status</label>
+            <select class="form-select" v-model="status">
+              <option selected value="0">Para Fazer</option>
+              <option value="1">Em progresso</option>
+              <option value="2">Concluída</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-6 mb-3">
+          <div class="form-group">
+            <label class="form-label">Data de Início:</label>
+            <input type="date" id="taskStart" v-model="date_start" class="form-control" />
+          </div>
+        </div>
+        <div class="col-sm-6 mb-3">
+          <div class="form-group">
+            <label class="form-label">Data de Término:</label>
+            <input type="date" id="taskEnd" v-model="date_end" class="form-control" />
+>>>>>>> 9408a7b (mudou-se estrutura: agora é com Vue 3)
           </div>
         </div>
         <div class="col-sm-12 mb-3">
@@ -20,6 +83,7 @@
         </div>
       </div>
     </form>
+<<<<<<< HEAD
     <div class="col-md-4">
       <section>
         <strong>
@@ -100,3 +164,7 @@ export default {
   }
 };
 </script>
+=======
+  </div>
+</template>
+>>>>>>> 9408a7b (mudou-se estrutura: agora é com Vue 3)

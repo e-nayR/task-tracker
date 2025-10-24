@@ -1,3 +1,19 @@
+<<<<<<< HEAD
+=======
+<script setup>
+import { ref } from 'vue'
+import Header from './components/Header.vue'
+import TaskForm from './components/TaskForm.vue'
+import TaskList from './components/TaskList.vue'
+
+const tasks = ref([])
+
+function addTask(data) {
+  tasks.value.push(data)
+}
+</script>
+
+>>>>>>> 9408a7b (mudou-se estrutura: agora é com Vue 3)
 <template>
   <div class="d-flex">
     <Header />
@@ -9,6 +25,7 @@
 
 </template>
 
+<<<<<<< HEAD
 <script>
 import Header from './components/Header.vue'
 import TaskForm from './components/TaskForm.vue'
@@ -33,4 +50,7 @@ export default {
   }
 }
 </script>
+=======
+
+>>>>>>> 9408a7b (mudou-se estrutura: agora é com Vue 3)
 
