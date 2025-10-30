@@ -2,12 +2,20 @@
 import { ref } from 'vue'
 import { parseISO, } from 'date-fns'
 
+const emit = defineEmits(['add-task'])
+
+const props = defineProps({
+  status_list: {
+    type: Array,
+    required: true
+  },
+})
+
+const status_arr = props.status_list.value
 const text = ref('')
 const date_start = ref(null)
 const date_end = ref(null)
 const status = ref(null)
-
-const emit = defineEmits(['add-task'])
 
 function onSubmit() {
   let start = date_start.value
@@ -50,9 +58,9 @@ function onSubmit() {
           <div class="form-group">
             <label class="form-label">Status</label>
             <select class="form-select" v-model="status">
-              <option selected value="0">Para Fazer</option>
-              <option value="1">Em progresso</option>
-              <option value="2">Concluída</option>
+              <div v-for="name, index in status_list">
+                <option :value=index>{{ name }}</option>
+              </div>
             </select>
           </div>
         </div>
