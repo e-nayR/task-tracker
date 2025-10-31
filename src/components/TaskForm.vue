@@ -11,7 +11,6 @@ const props = defineProps({
   },
 })
 
-const status_arr = props.status_list.value
 const text = ref('')
 const date_start = ref(null)
 const date_end = ref(null)
@@ -28,7 +27,6 @@ function onSubmit() {
   }
 
   emit('add-task', {
-    finish: (status.value == 2 ? true : false),
     text: text.value,
     date_start: start,
     date_end: end,
@@ -58,8 +56,8 @@ function onSubmit() {
           <div class="form-group">
             <label class="form-label">Status</label>
             <select class="form-select" v-model="status">
-              <div v-for="name, index in status_list">
-                <option :value=index>{{ name }}</option>
+              <div v-for="(name, s_index) in status_list">
+                <option :value=s_index>{{ name }}</option>
               </div>
             </select>
           </div>

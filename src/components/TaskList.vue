@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { ref } from 'vue'
 import { isToday, format } from 'date-fns'
 const today = new Date()
 
@@ -15,6 +15,8 @@ const props = defineProps({
     required: true
   },
 })
+
+const new_end = ref(null)
 
 function formatDate(date) {
   if (isToday(date)) {
@@ -41,13 +43,40 @@ function statusClass(val) {
   }
 }
 
+function updateStatus(task_index, new_status) {
+  const task = props.tasks[task_index]
+  emit('update-task', {
+    index: task_index,
+    task: {
+      ...task,
+      status: new_status
+    }
+  })
+}
+
+function changeDataEnd(task_index){
+  
+}
+
+function newDataEnd(task_index){
+  const task = props.tasks[task_index]
+  console.log(new_end.value)
+  // emit('update-task', {
+  //   index: task_index,
+  //   task: {
+  //     ...task,
+  //     date_end: new_end.value
+  //   }
+  // })
+}
+
 </script>
 
 <template>
   <div class="container">
     <div class="col-md-12 col-12 col-sm-12">
       <div class="card">
-        <div class="table-responsive">
+        <div class="table-responsive" style="overflow-y: visible;">
           <table class="table table-striped">
             <tbody>
               <tr>
@@ -56,26 +85,33 @@ function statusClass(val) {
                 <th>Data Início</th>
                 <th>Data Término</th>
               </tr>
-              <tr v-for="task, index in tasks" :key="index">
+              <tr v-for="task, t_index in tasks" :key="t_index">
                 <td>{{ task.text }}</td>
                 <td>
                   <div class="dropdown">
-                    <button class="dropdown-toggle btn p-0 border-0 bg-transparent" type="button" data-bs-toggle="dropdown">
+                    <button class="dropdown-toggle btn p-0 border-0 bg-transparent" type="button"
+                      data-bs-toggle="dropdown">
                       <span :class="statusClass(task.status)">
                         {{ status_list[task.status] }}
                       </span>
                     </button>
                     <ul class="dropdown-menu">
-                      <li v-for="(name, index) in status_list" :key="index">
-                        <a class="dropdown-item" href="#" @click.prevent="updateStatus(index, task)">
-                          <span :class="statusClass(index)">{{ name }}</span>
+                      <li v-for="(name, s_index) in status_list" :key="s_index">
+                        <a class="dropdown-item" href="#" @click.prevent="updateStatus(t_index, s_index)">
+                          <span :class="statusClass(s_index)">{{ name }}</span>
                         </a>
                       </li>
                     </ul>
                   </div>
                 </td>
-                <td>{{ task.date_start != null ? formatDate(task.date_start) : '-' }}</td>
-                <td>{{ task.date_end != null ? formatDate(task.date_end) : '-' }}</td>
+                <td>{{ task.date_start != null ? formatDate(task.date_start) : '' }}</td>
+                <td>
+                  <span id="data_end" @click="changeDataEnd(t_index)">{{ task.date_end != null ? formatDate(task.date_end) : '' }}</span>
+                  <div id="new_date_end" class="d-none">
+                    <input type="date" v-model="new_end" />
+                    <button type="submit" @submit.prevent="newDataEnd{t_index}">+</button>
+                  </div>
+                </td>
                 <!-- <td>
                   <a class="btn btn-primary btn-action mr-1" data-toggle="tooltip" title="" data-original-title="Edit"><i
                       class="bi bi-pencil"></i></a>
