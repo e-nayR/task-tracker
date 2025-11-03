@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { isToday, format } from 'date-fns'
+import { isToday, format, parseISO } from 'date-fns'
 const today = new Date()
 
 const emit = defineEmits(['update-task'])
@@ -16,14 +16,14 @@ const props = defineProps({
   },
 })
 
-const new_end = ref(null)
-
+// Problema: erro na data, está ficando com um dia a menos do escolhido
 function formatDate(date) {
-  if (isToday(date)) {
+  const iso_date = parseISO(date)
+  if (isToday(iso_date)) {
     return 'Hoje'
   }
 
-  const date_diference = date.getDate() - today.getDate()
+  const date_diference = iso_date.getDate() - today.getDate()
   if (date_diference == (-1)) return 'Ontem'
   if (date_diference == 1) return 'Amanhã'
 
@@ -54,21 +54,21 @@ function updateStatus(task_index, new_status) {
   })
 }
 
-function changeDataEnd(task_index){
-  
+const edit_field = ref({ index: null, field: null })
+
+function editField(index, field) {
+  edit_field.value = { index, field }
 }
 
-function newDataEnd(task_index){
-  const task = props.tasks[task_index]
-  console.log(new_end.value)
-  // emit('update-task', {
-  //   index: task_index,
-  //   task: {
-  //     ...task,
-  //     date_end: new_end.value
-  //   }
-  // })
+function isEditing(index, field) {
+  return edit_field.value.index === index && edit_field.value.field === field
 }
+
+function saveEditedField() {
+  edit_field.value = { index: null, field: null }
+  console.log(props.tasks)
+}
+
 
 </script>
 
@@ -76,7 +76,7 @@ function newDataEnd(task_index){
   <div class="container">
     <div class="col-md-12 col-12 col-sm-12">
       <div class="card">
-        <div class="table-responsive" style="overflow-y: visible;">
+        <div class="table-responsive">
           <table class="table table-striped">
             <tbody>
               <tr>
@@ -86,7 +86,22 @@ function newDataEnd(task_index){
                 <th>Data Término</th>
               </tr>
               <tr v-for="task, t_index in tasks" :key="t_index">
-                <td>{{ task.text }}</td>
+                <td @click="editField(t_index, 'text')">
+                  <template v-if="isEditing(t_index, 'text')">
+                    <input
+                      type="text"
+                      v-model="task.text"
+                      @blur="saveEditedField"
+                      @keyup.enter="saveEditedField"
+                      class="form-control"
+                      autofocus
+                      required
+                    />
+                  </template>
+                  <template v-else>
+                    {{ task.text }}
+                  </template>
+                </td>
                 <td>
                   <div class="dropdown">
                     <button class="dropdown-toggle btn p-0 border-0 bg-transparent" type="button"
@@ -104,13 +119,37 @@ function newDataEnd(task_index){
                     </ul>
                   </div>
                 </td>
-                <td>{{ task.date_start != null ? formatDate(task.date_start) : '' }}</td>
-                <td>
-                  <span id="data_end" @click="changeDataEnd(t_index)">{{ task.date_end != null ? formatDate(task.date_end) : '' }}</span>
-                  <div id="new_date_end" class="d-none">
-                    <input type="date" v-model="new_end" />
-                    <button type="submit" @submit.prevent="newDataEnd{t_index}">+</button>
-                  </div>
+                <td @click="editField(t_index, 'date_start')">
+                  <template v-if="isEditing(t_index, 'date_start')">
+                    <input
+                      type="date"
+                      v-model="task.date_start"
+                      @blur="saveEditedField"
+                      @keyup.enter="saveEditedField"
+                      class="form-control"
+                      autofocus
+                      required
+                    />
+                  </template>
+                  <template v-else>
+                    {{ task.date_start != null ? formatDate(task.date_start) : '' }}
+                  </template>
+                </td>
+                <td @click="editField(t_index, 'date_end')">
+                  <template v-if="isEditing(t_index, 'date_end')">
+                    <input
+                      type="date"
+                      v-model="task.date_end"
+                      @blur="saveEditedField"
+                      @keyup.enter="saveEditedField"
+                      class="form-control"
+                      autofocus
+                      required
+                    />
+                  </template>
+                  <template v-else>
+                    {{ task.date_end != null ? formatDate(task.date_end) : '' }}
+                  </template>
                 </td>
                 <!-- <td>
                   <a class="btn btn-primary btn-action mr-1" data-toggle="tooltip" title="" data-original-title="Edit"><i
