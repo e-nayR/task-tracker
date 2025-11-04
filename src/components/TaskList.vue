@@ -1,9 +1,8 @@
 <script setup>
 import { ref } from 'vue'
-import { isToday, format, parseISO } from 'date-fns'
-const today = new Date()
+import { isToday, format, parseISO, differenceInCalendarDays } from 'date-fns'
 
-const emit = defineEmits(['update-task'])
+const emit = defineEmits(['update-task', 'remove-task'])
 
 const props = defineProps({
   tasks: {
@@ -16,18 +15,20 @@ const props = defineProps({
   },
 })
 
-// Problema: erro na data, está ficando com um dia a menos do escolhido
 function formatDate(date) {
-  const iso_date = parseISO(date)
-  if (isToday(iso_date)) {
-    return 'Hoje'
-  }
+  if (!date) return ''
 
-  const date_diference = iso_date.getDate() - today.getDate()
-  if (date_diference == (-1)) return 'Ontem'
-  if (date_diference == 1) return 'Amanhã'
+  const [year, month, day] = date.split('-').map(Number)
+  const iso_date = new Date(year, month - 1, day)
+  const today = new Date()
 
-  return format(date, 'dd/MM/yyyy')
+  if (isToday(iso_date)) return 'Hoje'
+
+  const diff = differenceInCalendarDays(iso_date, today)
+  if (diff === -1) return 'Ontem'
+  if (diff === 1) return 'Amanhã'
+
+  return format(iso_date, 'dd/MM/yyyy')
 }
 
 function statusClass(val) {
@@ -66,7 +67,12 @@ function isEditing(index, field) {
 
 function saveEditedField() {
   edit_field.value = { index: null, field: null }
-  console.log(props.tasks)
+}
+
+function removeTask(task_index, ) {
+  emit('remove-task', {
+    index: task_index
+  })
 }
 
 
@@ -84,6 +90,7 @@ function saveEditedField() {
                 <th>Status</th>
                 <th>Data Início</th>
                 <th>Data Término</th>
+                <th></th>
               </tr>
               <tr v-for="task, t_index in tasks" :key="t_index">
                 <td @click="editField(t_index, 'text')">
@@ -151,13 +158,11 @@ function saveEditedField() {
                     {{ task.date_end != null ? formatDate(task.date_end) : '' }}
                   </template>
                 </td>
-                <!-- <td>
-                  <a class="btn btn-primary btn-action mr-1" data-toggle="tooltip" title="" data-original-title="Edit"><i
-                      class="bi bi-pencil"></i></a>
-                  <a class="btn btn-danger btn-action" data-toggle="tooltip" title=""
+                <td>
+                  <a class="btn btn-danger btn-action" data-toggle="tooltip"
                     data-confirm="Are You Sure?|This action can not be undone. Do you want to continue?"
-                    data-confirm-yes="alert('Deleted')" data-original-title="Delete"><i class="bi bi-trash"></i></a>
-                </td> -->
+                    data-confirm-yes="alert('Deleted')" @click.prevent="removeTask(t_index)"><i class="bi bi-trash"></i></a>
+                </td>
               </tr>
             </tbody>
           </table>
