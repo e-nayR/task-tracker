@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue'
-import { parseISO, } from 'date-fns'
+import { useAuthStore } from '../stores/userStore'
+
+const authStore = useAuthStore()
 
 const emit = defineEmits(['add-task'])
 
@@ -19,18 +21,13 @@ const status = ref(null)
 function onSubmit() {
   let start = date_start.value
   let end = date_end.value
-  // if (start != null) {
-  //   start = parseISO(start)
-  // }
-  // if (end != null) {
-  //   end = parseISO(end)
-  // }
 
   emit('add-task', {
     text: text.value,
     date_start: start,
     date_end: end,
-    status: status.value
+    status: status.value,
+    owner: authStore.currentUser != null ? authStore.currentUser.id : null
   })
 
   // Limpar campos

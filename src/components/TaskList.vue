@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
-import { isToday, format, parseISO, differenceInCalendarDays } from 'date-fns'
+import { isToday, format, differenceInCalendarDays } from 'date-fns'
+import { useAuthStore } from '../stores/userStore'
 
 const emit = defineEmits(['update-task', 'remove-task'])
 
@@ -16,8 +17,6 @@ const props = defineProps({
 })
 
 function formatDate(date) {
-  if (!date) return ''
-
   const [year, month, day] = date.split('-').map(Number)
   const iso_date = new Date(year, month - 1, day)
   const today = new Date()
@@ -75,6 +74,12 @@ function removeTask(task_index, ) {
   })
 }
 
+function userTask(id){
+  const userStore = useAuthStore()
+  const user = userStore.users.find(attr => attr.id === id) || null
+  return user != null ? user.email : 'Sem responsável'
+}
+
 
 </script>
 
@@ -88,6 +93,7 @@ function removeTask(task_index, ) {
               <tr>
                 <th>Tarefa</th>
                 <th>Status</th>
+                <th>Responsável</th>
                 <th>Data Início</th>
                 <th>Data Término</th>
                 <th></th>
@@ -126,6 +132,7 @@ function removeTask(task_index, ) {
                     </ul>
                   </div>
                 </td>
+                <td>{{ userTask(task.owner) }}</td>
                 <td @click="editField(t_index, 'date_start')">
                   <template v-if="isEditing(t_index, 'date_start')">
                     <input
@@ -139,7 +146,7 @@ function removeTask(task_index, ) {
                     />
                   </template>
                   <template v-else>
-                    {{ task.date_start != null ? formatDate(task.date_start) : '' }}
+                    {{ task.date_start != null ? formatDate(task.date_start) : '-' }}
                   </template>
                 </td>
                 <td @click="editField(t_index, 'date_end')">
@@ -155,7 +162,7 @@ function removeTask(task_index, ) {
                     />
                   </template>
                   <template v-else>
-                    {{ task.date_end != null ? formatDate(task.date_end) : '' }}
+                    {{ task.date_end != null ? formatDate(task.date_end) : '-' }}
                   </template>
                 </td>
                 <td>
