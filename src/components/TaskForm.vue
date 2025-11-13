@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { useAuthStore } from '../stores/userStore'
+import { useAuthStore } from '../stores/authStore'
 
 const authStore = useAuthStore()
 

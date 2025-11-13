@@ -12,7 +12,6 @@ export const useTaskStore = defineStore("taskStore", () => {
 
     function addTask(data) {
         tasks.value.push(data)
-        console.log(tasks.value)
     }
 
     function updateTask(data) {

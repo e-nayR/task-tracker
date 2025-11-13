@@ -8,7 +8,6 @@ export const useAuthStore = defineStore("auth", () => {
 
     function addUser(data) {
         users.value.push(data)
-        console.log(users.value)
     }
 
     function login(email){

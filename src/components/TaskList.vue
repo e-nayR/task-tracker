@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { isToday, format, differenceInCalendarDays } from 'date-fns'
-import { useAuthStore } from '../stores/userStore'
+import { useAuthStore } from '../stores/authStore'
 
 const emit = defineEmits(['update-task', 'remove-task'])
 
@@ -75,8 +75,8 @@ function removeTask(task_index, ) {
 }
 
 function userTask(id){
-  const userStore = useAuthStore()
-  const user = userStore.users.find(attr => attr.id === id) || null
+  const authStore = useAuthStore()
+  const user = authStore.users.find(attr => attr.id === id) || null
   return user != null ? user.email : 'Sem responsável'
 }
 

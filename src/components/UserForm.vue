@@ -1,5 +1,8 @@
 <script setup>
 import { ref } from 'vue'
+import { useAuthStore } from '../stores/authStore'
+
+const authStore = useAuthStore();
 
 const emit = defineEmits(['add-user'])
 
@@ -21,7 +24,8 @@ function onSubmit() {
         email: email.value,
         stack: stack_selected.value
     })
-
+    
+    authStore.login(email.value)
     email.value = ''
     username.value = ''
     stack_selected.value = []

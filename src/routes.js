@@ -1,9 +1,11 @@
 import TaskPage from "./pages/TaskPage.vue";
-import UserPage from "./pages/UserPage.vue";
+import LoginPage from "./pages/LoginPage.vue";
+import PerfilPage from "./pages/PerfilPage.vue";
 
 const routes = [
-  { path: '/page/tasks/', component: TaskPage },
-  { path: '/page/users/', component: UserPage }
+  { path: '/page/tasks', component: TaskPage },
+  { path: '/page/auth', component: LoginPage },
+  { path: '/page/perfil', component: PerfilPage }
 ]
 
 export default routes
