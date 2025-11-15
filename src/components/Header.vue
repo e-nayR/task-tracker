@@ -29,10 +29,10 @@ function logout() {
         </router-link>
       </li>
       <li>
-        <a href="#" class="nav-link text-white">
+        <router-link to="/page/dashboard" class="nav-link text-white">
           <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
-          Configurações
-        </a>
+          Painel
+        </router-link>
       </li>
       <li v-if="authStore.currentUser">
         <div class="nav-link text-white" @click.prevent="logout">

@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useAuthStore } from '../stores/authStore'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 const authStore = useAuthStore();
 
@@ -18,17 +20,20 @@ const username = ref('')
 const stack_selected = ref([])
 
 function onSubmit() {
+    const user_id = Math.floor(Math.random() * 100000) 
     emit('add-user', {
-        id: Math.floor(Math.random() * 100000),
+        id: user_id,
         username: username.value,
         email: email.value,
         stack: stack_selected.value
     })
     
-    authStore.login(email.value)
+    authStore.login(user_id)
     email.value = ''
     username.value = ''
     stack_selected.value = []
+
+    router.push('/page/tasks')
 }
 </script>
 

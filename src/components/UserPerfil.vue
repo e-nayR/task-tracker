@@ -1,12 +1,10 @@
 <script setup>
 const props = defineProps({
     stack: {
-        type: Array,
-        required: true
+        type: Array
     },
     user: {
-        type: Object,
-        required: true
+        type: Object
     },
 })
 </script>

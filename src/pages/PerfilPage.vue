@@ -7,12 +7,17 @@ import { useTaskStore } from '../stores/taskStore';
 
 const taskStore = useTaskStore();
 const authStore = useAuthStore();
-console.log(taskStore.tasks)
-console.log(authStore.users)
-const user = computed(() => authStore.currentUser)
-const tasks = computed(() => taskStore.tasks.filter(attr => attr.owner === user.id) || null)
+
+const user = computed(() => authStore.currentUser) || null
+const tasks = computed(() => {
+    if (!user.value) return []
+    return taskStore.tasksByUser(user.value.id)
+})
+
 </script>
 <template>
-    <UserPerfil :stack="authStore.stack" :user="user" />
+    <div class="mb-3">
+        <UserPerfil :stack="authStore.stack" :user="user" />
+    </div>
     <TaskList :tasks="tasks" :status_list="taskStore.status_list" @update-task="taskStore.updateTask" @remove-task="taskStore.removeTask" />
 </template>

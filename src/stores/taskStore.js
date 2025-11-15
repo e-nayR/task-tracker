@@ -22,11 +22,22 @@ export const useTaskStore = defineStore("taskStore", () => {
         tasks.value.splice(data.index, 1)
     }
 
+    function tasksByUser(id){
+        return tasks.value.filter(obj => obj.owner === id)
+    }
+
+    function tasksByStatus(status, tasks){
+        const arr = tasks.filter(task => task.status == status)
+        return arr.length
+    }
+
     return {
         tasks,
         status_list,
         addTask,
         updateTask,
         removeTask,
+        tasksByUser,
+        tasksByStatus
     };
 })

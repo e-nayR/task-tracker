@@ -10,8 +10,8 @@ export const useAuthStore = defineStore("auth", () => {
         users.value.push(data)
     }
 
-    function login(email){
-        const user = users.value.find(attr => attr.email === email) || null
+    function login(id){
+        const user = users.value.find(attr => attr.id === id) || null
         currentUser.value = user
     }
 

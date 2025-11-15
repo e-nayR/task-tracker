@@ -86,20 +86,23 @@ function userTask(id){
 <template>
   <div class="container">
     <div class="col-md-12 col-12 col-sm-12">
-      <div class="card">
+      <div class="card border-0 shadow-sm">
         <div class="table-responsive">
-          <table class="table table-striped">
-            <tbody>
+          <table class="table table-hover mb-0">
+            <thead class="table-light">
               <tr>
-                <th>Tarefa</th>
-                <th>Status</th>
-                <th>Responsável</th>
-                <th>Data Início</th>
-                <th>Data Término</th>
+                <th class="text-center">Responsável</th>
+                <th class="text-center">Tarefa</th>
+                <th class="text-center">Status</th>
+                <th class="text-center">Data Início</th>
+                <th class="text-center">Data Término</th>
                 <th></th>
               </tr>
+            </thead>
+            <tbody>
               <tr v-for="task, t_index in tasks" :key="t_index">
-                <td @click="editField(t_index, 'text')">
+                <td class="text-center">{{ userTask(task.owner) }}</td>
+                <td class="text-center" @click="editField(t_index, 'text')">
                   <template v-if="isEditing(t_index, 'text')">
                     <input
                       type="text"
@@ -115,7 +118,7 @@ function userTask(id){
                     {{ task.text }}
                   </template>
                 </td>
-                <td>
+                <td class="text-center">
                   <div class="dropdown">
                     <button class="dropdown-toggle btn p-0 border-0 bg-transparent" type="button"
                       data-bs-toggle="dropdown">
@@ -132,8 +135,7 @@ function userTask(id){
                     </ul>
                   </div>
                 </td>
-                <td>{{ userTask(task.owner) }}</td>
-                <td @click="editField(t_index, 'date_start')">
+                <td class="text-center" @click="editField(t_index, 'date_start')">
                   <template v-if="isEditing(t_index, 'date_start')">
                     <input
                       type="date"
@@ -149,7 +151,7 @@ function userTask(id){
                     {{ task.date_start != null ? formatDate(task.date_start) : '-' }}
                   </template>
                 </td>
-                <td @click="editField(t_index, 'date_end')">
+                <td class="text-center" @click="editField(t_index, 'date_end')">
                   <template v-if="isEditing(t_index, 'date_end')">
                     <input
                       type="date"
@@ -165,8 +167,8 @@ function userTask(id){
                     {{ task.date_end != null ? formatDate(task.date_end) : '-' }}
                   </template>
                 </td>
-                <td>
-                  <a class="btn btn-danger btn-action" data-toggle="tooltip"
+                <td class="text-center">
+                  <a class="btn btn-sm btn-outline-danger" data-toggle="tooltip"
                     data-confirm="Are You Sure?|This action can not be undone. Do you want to continue?"
                     data-confirm-yes="alert('Deleted')" @click.prevent="removeTask(t_index)"><i class="bi bi-trash"></i></a>
                 </td>
