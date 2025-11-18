@@ -50,4 +50,16 @@ function logout() {
   </div>
 </template>
 
-<script></script>
+<style>
+.nav-link:hover {
+  background-color: rgb(78, 111, 157);
+}
+
+.router-link-active {
+  background-color: rgb(78, 111, 157) !important;
+}
+
+.router-link-exact-active {
+  background-color: rgb(78, 111, 157) !important;
+}
+</style>

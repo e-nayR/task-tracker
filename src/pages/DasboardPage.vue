@@ -38,8 +38,8 @@ if (tasks.value){
         users.value.forEach(user => {
             const user_tasks = taskStore.tasksByUser(user.id)
             const finished = taskStore.tasksByStatus(2, user_tasks)
-            const total_finished = finished ? finished.length : 0
-            const tasks_progress = total_finished/user_tasks.length * 100
+            const incompleted_tasks = user_tasks.length - finished
+            const progress_bar = incompleted_tasks/user_tasks.length * 100
             users_board.value.push({
                 id: user.id,
                 name:user.username,
@@ -48,7 +48,7 @@ if (tasks.value){
                 todo_tasks:taskStore.tasksByStatus(0, user_tasks),
                 finished_tasks:finished,
                 doing_tasks:taskStore.tasksByStatus(1, user_tasks),
-                progress: tasks_progress
+                progress: `${progress_bar}%`
             })
         });
     }

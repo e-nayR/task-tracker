@@ -121,7 +121,7 @@ function userTask(id){
                 <td class="text-center">
                   <div class="dropdown">
                     <button class="dropdown-toggle btn p-0 border-0 bg-transparent" type="button"
-                      data-bs-toggle="dropdown">
+                      data-bs-toggle="dropdown" data-bs-display="static">
                       <span :class="statusClass(task.status)">
                         {{ status_list[task.status] }}
                       </span>
@@ -180,3 +180,9 @@ function userTask(id){
     </div>
   </div>
 </template>
+
+<style>
+.table-responsive {
+  overflow: visible !important;
+}
+</style>
