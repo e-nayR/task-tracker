@@ -28,7 +28,7 @@ function onSubmit() {
         stack: stack_selected.value
     })
     
-    authStore.login(user_id)
+    authStore.login(email.value)
     email.value = ''
     username.value = ''
     stack_selected.value = []

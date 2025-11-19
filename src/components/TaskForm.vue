@@ -16,7 +16,7 @@ const props = defineProps({
 const text = ref('')
 const date_start = ref(null)
 const date_end = ref(null)
-const status = ref(null)
+const status = ref(0)
 
 function onSubmit() {
   let start = date_start.value
@@ -34,7 +34,18 @@ function onSubmit() {
   text.value = ''
   date_start.value = null
   date_end.value = null
-  status.value = null
+  status.value = 0
+}
+
+function optionClass(index){
+  switch (index) {
+    case 0:
+      return 'text-secondary'
+    case 1:
+      return 'text-warning'
+    case 2:
+      return 'text-success'
+  }
 }
 </script>
 
@@ -52,10 +63,8 @@ function onSubmit() {
         <div class="col-sm-6 mb-3">
           <div class="form-group">
             <label class="form-label">Status</label>
-            <select class="form-select" v-model="status">
-              <div v-for="(name, s_index) in status_list">
-                <option :value=s_index>{{ name }}</option>
-              </div>
+            <select class="form-select" v-model="status" :class="optionClass(status)">
+                <option v-for="(name, s_index) in status_list" :value=s_index :class="optionClass(s_index)">{{ name }}</option>
             </select>
           </div>
         </div>

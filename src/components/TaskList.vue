@@ -33,7 +33,7 @@ function formatDate(date) {
 function statusClass(val) {
   switch (val) {
     case 0:
-      return 'badge rounded-pill text-bg-danger'
+      return 'badge rounded-pill text-bg-secondary'
     case 1:
       return 'badge rounded-pill text-bg-warning'
     case 2:
@@ -168,7 +168,7 @@ function userTask(id){
                   </template>
                 </td>
                 <td class="text-center">
-                  <a class="btn btn-sm btn-outline-danger" data-toggle="tooltip"
+                  <a class="btn btn-sm btn-outline-secondary" data-toggle="tooltip"
                     data-confirm="Are You Sure?|This action can not be undone. Do you want to continue?"
                     data-confirm-yes="alert('Deleted')" @click.prevent="removeTask(t_index)"><i class="bi bi-trash"></i></a>
                 </td>
