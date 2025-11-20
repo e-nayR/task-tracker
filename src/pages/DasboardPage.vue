@@ -52,8 +52,14 @@ if (tasks.value) {
             const user_tasks = taskStore.tasksByUser(user.id)
             if (user_tasks.length > 0) {
                 const finished = taskStore.tasksByStatus(2, user_tasks)
-                const incompleted_tasks = user_tasks.length - finished
-                const progress_bar = incompleted_tasks / user_tasks.length * 100
+                let progress_bar
+                if (finished == 0) {
+                    progress_bar = 0
+                } else {
+                    const incompleted_tasks = user_tasks.length - finished
+                    console.log(incompleted_tasks)
+                    progress_bar = incompleted_tasks / user_tasks.length * 100
+                }
                 const sorted = user_tasks.sort((a, b) => {
                     const d1 = a.date_end;
                     const d2 = b.date_end;
@@ -84,7 +90,7 @@ if (tasks.value) {
                                         due_date = 'Hoje';
                                 }
                                 board_data.due_date = `em ${diff} dias`
-                            }else{ due_date = format(iso_date, 'dd/MM/yyyy') }
+                            } else { due_date = format(iso_date, 'dd/MM/yyyy') }
                             board_data.due_date = due_date
                         }
                     }
@@ -97,7 +103,6 @@ if (tasks.value) {
                     board_data.progress = `${progress_bar}%`
             }
             users_board.value.push(board_data)
-            console.log(users_board.value)
         };
     }
 } else {
