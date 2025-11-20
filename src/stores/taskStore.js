@@ -18,38 +18,38 @@ export const useTaskStore = defineStore("taskStore", () => {
             text: "Pesquisar novas tecnologias para o backend"
         },
         {
-            date_end: "2025-11-21",
-            date_start: "2025-11-19",
+            date_end: "2025-11-19",
+            date_start: "2025-11-17",
             owner: 14477,
-            status: 0, // A fazer
+            status: 0,
             text: "Configurar o ambiente de desenvolvimento local"
         },
         {
             date_end: "2025-11-25",
             date_start: "2025-11-18",
             owner: 88700,
-            status: 1, // Em progresso
+            status: 1,
             text: "Implementar a funcionalidade de login com OAuth"
         },
         {
             date_end: "2025-11-15",
             date_start: "2025-11-10",
             owner: 57682,
-            status: 2, // Concluído
+            status: 0,
             text: "Criar a documentação inicial da API"
         },
         {
             date_end: "2025-12-01",
-            date_start: "2025-11-20",
+            date_start: "2025-11-19",
             owner: 14477,
-            status: 1, // Em progresso
+            status: 1,
             text: "Revisar o código dos colegas para a 'Sprint 1'"
         },
         {
             date_end: "2025-11-30",
             date_start: "2025-11-25",
-            owner: null, // Sem proprietário atribuído
-            status: 0, // A fazer
+            owner: null,
+            status: 0,
             text: "Definir a estrutura final do banco de dados"
         }
     ])

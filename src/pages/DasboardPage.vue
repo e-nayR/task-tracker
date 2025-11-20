@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from "vue";
-import { differenceInDays } from 'date-fns';
+import { differenceInCalendarDays } from 'date-fns';
 import { useAuthStore } from '../stores/authStore'
 import { useTaskStore } from '../stores/taskStore';
 
@@ -60,18 +60,34 @@ if (tasks.value) {
     todo_tasks = 0
 }
 
+function numberLateTasks() {
+    let count = 0
+    for (const task of tasks.value) {
+        if (task.date_end && task.status != 2) {
+            const [year, month, day] = task.date_end.split('-').map(Number)
+            const iso_date = new Date(year, month - 1, day)
+            const today = new Date()
+            const diff = differenceInCalendarDays(iso_date, today)
+            if (diff < 0) {
+                count++;
+            } else {
+                continue;
+            }
+        } else {
+            continue;
+        }
+    }
+    return count
+}
+
 const metrics = [
     { title: "Total de Tarefas", icon_class: "bi bi-list-check text-primary", value: total_tasks, value_class: "text-primary mb-3" },
     { title: "Pendentes", icon_class: "bi bi-exclamation-circle text-secondary", value: todo_tasks, value_class: "text-secondary mb-3" },
     { title: "Em Progresso", icon_class: "bi bi-arrow-clockwise text-warning", value: doing_tasks, value_class: "text-warning mb-3" },
-    { title: "Concluídas", icon_class: "bi bi-check-circle text-success", value: finished_tasks, value_class: "text-success mb-3" }
+    { title: "Concluídas", icon_class: "bi bi-check-circle text-success", value: finished_tasks, value_class: "text-success mb-3" },
+    { title: "Atrasadas", icon_class: "bi bi-alarm text-danger", value: numberLateTasks(), value_class: "text-danger mb-3" }
 ]
 
-function numberLateTasks(){
-    const today = new Date()
-    console.log(today)
-    console.log(tasks.value[0])
-}
 </script>
 <template>
     <div class="container-fluid">
@@ -89,22 +105,6 @@ function numberLateTasks(){
                         <!-- <small class="text-muted">
                             <i class="bi bi-arrow-up text-success"></i> +5 esta semana
                         </small> -->
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div>
-                                <p class="text-muted mb-2">Atrasadas</p>
-                                <h2 class="text-danger mb-3">3</h2>
-                            </div>
-                            <i class="bi bi-alarm text-danger" style="font-size: 2.5rem; opacity: 0.8;"></i>
-                        </div>
-                        <small class="text-muted">
-                            <i class="bi bi-exclamation-triangle text-danger"></i> Requerem atenção
-                        </small>
                     </div>
                 </div>
             </div>
