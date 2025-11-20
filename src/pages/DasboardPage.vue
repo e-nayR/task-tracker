@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from "vue";
-import { differenceInCalendarDays } from 'date-fns';
+import { differenceInCalendarDays, parseISO, format } from 'date-fns';
 import { useAuthStore } from '../stores/authStore'
 import { useTaskStore } from '../stores/taskStore';
 
@@ -36,22 +36,69 @@ if (tasks.value) {
     todo_tasks = taskStore.tasksByStatus(0, arr_tasks)
 
     if (users.value) {
-        users.value.forEach(user => {
-            const user_tasks = taskStore.tasksByUser(user.id)
-            const finished = taskStore.tasksByStatus(2, user_tasks)
-            const incompleted_tasks = user_tasks.length - finished
-            const progress_bar = incompleted_tasks / user_tasks.length * 100
-            users_board.value.push({
+        for (const user of users.value) {
+            const board_data = {
                 id: user.id,
                 name: user.username,
                 email: user.email,
-                total_tasks: user_tasks.length,
-                todo_tasks: taskStore.tasksByStatus(0, user_tasks),
-                finished_tasks: finished,
-                doing_tasks: taskStore.tasksByStatus(1, user_tasks),
-                progress: `${progress_bar}%`
-            })
-        });
+                total_tasks: 0,
+                todo_tasks: 0,
+                finished_tasks: 0,
+                doing_tasks: 0,
+                progress: "0%",
+                late: false,
+                due_date: null
+            }
+            const user_tasks = taskStore.tasksByUser(user.id)
+            if (user_tasks.length > 0) {
+                const finished = taskStore.tasksByStatus(2, user_tasks)
+                const incompleted_tasks = user_tasks.length - finished
+                const progress_bar = incompleted_tasks / user_tasks.length * 100
+                const sorted = user_tasks.sort((a, b) => {
+                    const d1 = a.date_end;
+                    const d2 = b.date_end;
+
+                    if (!d1 && !d2) return 0;
+                    if (!d1) return 1;
+                    if (!d2) return -1;
+
+                    const date1 = new Date(d1);
+                    const date2 = new Date(d2);
+
+                    return date2 - date1;
+                });
+                if (sorted) {
+                    if (sorted[0].date_end) {
+                        const today = new Date()
+                        const iso_date = parseISO(sorted[0].date_end)
+                        const diff = differenceInCalendarDays(iso_date, today)
+                        if (diff < 0) {
+                            board_data.late = true
+                        } else {
+                            let due_date;
+                            if (diff <= 5) {
+                                switch (diff) {
+                                    case 1:
+                                        due_date = 'Amanhã';
+                                    case 0:
+                                        due_date = 'Hoje';
+                                }
+                                board_data.due_date = `em ${diff} dias`
+                            }else{ due_date = format(iso_date, 'dd/MM/yyyy') }
+                            board_data.due_date = due_date
+                        }
+                    }
+                }
+
+                board_data.total_tasks = user_tasks.length,
+                    board_data.todo_tasks = taskStore.tasksByStatus(0, user_tasks),
+                    board_data.finished_tasks = finished,
+                    board_data.doing_tasks = taskStore.tasksByStatus(1, user_tasks),
+                    board_data.progress = `${progress_bar}%`
+            }
+            users_board.value.push(board_data)
+            console.log(users_board.value)
+        };
     }
 } else {
     total_tasks = 0
@@ -64,10 +111,8 @@ function numberLateTasks() {
     let count = 0
     for (const task of tasks.value) {
         if (task.date_end && task.status != 2) {
-            const [year, month, day] = task.date_end.split('-').map(Number)
-            const iso_date = new Date(year, month - 1, day)
             const today = new Date()
-            const diff = differenceInCalendarDays(iso_date, today)
+            const diff = differenceInCalendarDays(parseISO(task.date_end), today)
             if (diff < 0) {
                 count++;
             } else {
@@ -81,11 +126,11 @@ function numberLateTasks() {
 }
 
 const metrics = [
-    { title: "Total de Tarefas", icon_class: "bi bi-list-check text-primary", value: total_tasks, value_class: "text-primary mb-3" },
-    { title: "Pendentes", icon_class: "bi bi-exclamation-circle text-secondary", value: todo_tasks, value_class: "text-secondary mb-3" },
-    { title: "Em Progresso", icon_class: "bi bi-arrow-clockwise text-warning", value: doing_tasks, value_class: "text-warning mb-3" },
-    { title: "Concluídas", icon_class: "bi bi-check-circle text-success", value: finished_tasks, value_class: "text-success mb-3" },
-    { title: "Atrasadas", icon_class: "bi bi-alarm text-danger", value: numberLateTasks(), value_class: "text-danger mb-3" }
+    { title: "Total de Tarefas", icon_class: "bi bi-clipboard-data text-primary", value: total_tasks, value_class: "text-primary mb-3" },
+    { title: "Atrasadas", icon_class: "bi bi-alarm text-danger", value: numberLateTasks(), value_class: "text-danger mb-3" },
+    { title: "Não iniciadas", icon_class: "bi bi-hourglass-top text-secondary", value: todo_tasks, value_class: "text-secondary mb-3" },
+    { title: "Em Progresso", icon_class: "bi bi-arrow-repeat text-warning", value: doing_tasks, value_class: "text-warning mb-3" },
+    { title: "Concluídas", icon_class: "bi bi-check-circle-fill text-success", value: finished_tasks, value_class: "text-success mb-3" },
 ]
 
 </script>
@@ -116,19 +161,19 @@ const metrics = [
                     <table class="table table-hover mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>Responsável</th>
+                                <th class="text-center">Responsável</th>
                                 <th class="text-center">Total</th>
                                 <th class="text-center">Em Progresso</th>
                                 <th class="text-center">Concluídas</th>
                                 <th class="text-center">Pendentes</th>
-                                <th>Progresso</th>
-                                <th>Próxima Tarefa Vence</th>
+                                <th class="text-center">Progresso</th>
+                                <th class="text-center">Próxima Tarefa Vence</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="user in users_board" :key="user.id">
-                                <td>
-                                    <div class="d-flex align-items-center gap-3">
+                                <td class="text-left">
+                                    <div class="d-flex gap-3 justify-content-center">
                                         <div>
                                             <div class="fw-bold">{{ user.name }}</div>
                                             <small class="text-muted">{{ user.email }}</small>
@@ -147,20 +192,22 @@ const metrics = [
                                 <td class="text-center">
                                     <span class="badge bg-secondary">{{ user.todo_tasks }}</span>
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     <div class="progress" style="height: 6px;">
                                         <div class="progress-bar bg-success" :style="{ width: user.progress }"></div>
                                     </div>
                                 </td>
-                                <td>
-                                    <small class="text-muted">
-                                        <i class="bi bi-calendar-alt me-1"></i>em 3 dias
-                                    </small>
-                                </td>
-                                <td>
-                                    <small class="text-secondary">
-                                        <i class="bi bi-exclamation-circle me-1"></i>Atrasada
-                                    </small>
+                                <td class="text-center">
+                                    <template v-if="user.late">
+                                        <small class="text-danger fw-bold">
+                                            <i class="bi bi-exclamation-circle-fill me-1"></i>Atrasada
+                                        </small>
+                                    </template>
+                                    <template v-else-if="user.due_date">
+                                        <small class="text-muted">
+                                            {{ user.due_date }}
+                                        </small>
+                                    </template>
                                 </td>
                             </tr>
                         </tbody>

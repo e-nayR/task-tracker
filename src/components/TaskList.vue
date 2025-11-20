@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { isToday, format, differenceInCalendarDays } from 'date-fns'
+import { isToday, format, differenceInCalendarDays, parseISO } from 'date-fns'
 import { useAuthStore } from '../stores/authStore'
 
 const emit = defineEmits(['update-task', 'remove-task'])
@@ -17,8 +17,7 @@ const props = defineProps({
 })
 
 function formatDate(date) {
-  const [year, month, day] = date.split('-').map(Number)
-  const iso_date = new Date(year, month - 1, day)
+  const iso_date = parseISO(date)
   const today = new Date()
 
   if (isToday(iso_date)) return 'Hoje'
@@ -91,17 +90,17 @@ function userTask(id){
           <table class="table table-hover mb-0">
             <thead class="table-light">
               <tr>
-                <th class="text-center">Responsável</th>
+                <th class="text-center" v-if="$route.name !== 'perfil'">Responsável</th>
                 <th class="text-center">Tarefa</th>
                 <th class="text-center">Status</th>
                 <th class="text-center">Data Início</th>
                 <th class="text-center">Data Término</th>
-                <th></th>
+                <th v-if="$route.name !== 'perfil'"></th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="task, t_index in tasks" :key="t_index">
-                <td class="text-center">{{ userTask(task.owner) }}</td>
+                <td class="text-center" v-if="$route.name !== 'perfil'">{{ userTask(task.owner) }}</td>
                 <td class="text-center" @click="editField(t_index, 'text')">
                   <template v-if="isEditing(t_index, 'text')">
                     <input
@@ -167,7 +166,7 @@ function userTask(id){
                     {{ task.date_end != null ? formatDate(task.date_end) : '-' }}
                   </template>
                 </td>
-                <td class="text-center">
+                <td class="text-center" v-if="$route.name !== 'perfil'">
                   <a class="btn btn-sm btn-outline-secondary" data-toggle="tooltip"
                     data-confirm="Are You Sure?|This action can not be undone. Do you want to continue?"
                     data-confirm-yes="alert('Deleted')" @click.prevent="removeTask(t_index)"><i class="bi bi-trash"></i></a>
